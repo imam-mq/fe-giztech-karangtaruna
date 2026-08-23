@@ -100,3 +100,12 @@
 @utility max-w-container-max {
   max-width: var(--spacing-container-max);
 }
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
