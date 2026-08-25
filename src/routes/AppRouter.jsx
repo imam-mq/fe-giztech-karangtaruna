@@ -5,11 +5,8 @@ import { ROLES } from "../constants/roles";
 // Public
 import PublicLayout from "../features/public/layouts/PublicLayout";
 import BerandaPage from "../features/public/pages/BerandaPage";
-
-// Contoh import halaman lain (sesuaikan dengan file yang kamu buat di features/*)
-// import LoginPage from "../features/auth/pages/LoginPage";
-// import DashboardPage from "../features/dashboard/pages/DashboardPage";
-// import AspirasiListPage from "../features/aspirasi/pages/AspirasiListPage";
+import TentangKamiPage from "../features/public/pages/TentangKamiPage";
+import TimPage from "../features/public/pages/TimPage";
 
 export default function AppRouter() {
   return (
@@ -18,7 +15,9 @@ export default function AppRouter() {
         {/* Public routes - website company profile GIZ Technology */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<BerandaPage />} />
-          {/* Route publik lain (Tentang Kami, Layanan, dst) menyusul di sini */}
+          <Route path="/tentang" element={<TentangKamiPage />} />
+          <Route path="/tim" element={<TimPage />} />
+          
         </Route>
 
         {/* Public routes - auth */}

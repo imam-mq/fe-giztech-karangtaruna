@@ -109,3 +109,7 @@
     transform: translateX(-50%);
   }
 }
+
+@utility soft-shadow {
+  box-shadow: 0px 20px 40px rgba(30, 41, 59, 0.04);
+}

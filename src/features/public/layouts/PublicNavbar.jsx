@@ -10,7 +10,7 @@ const NAV_LINKS = [
     to: "/tentang",
     children: [
       { label: "Profil Perusahaan", to: "/tentang" },
-      { label: "Tim Kami", to: "/tentang#tim" },
+      { label: "Tim Kami", to: "/tim" },
     ],
   },
   {

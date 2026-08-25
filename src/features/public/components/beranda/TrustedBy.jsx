@@ -1,4 +1,4 @@
-import LogoMarquee from "../../../components/ui/LogoMarquee";
+import LogoMarquee from "../../../../components/ui/LogoMarquee";
 const CLIENTS = [
   { name: "Company A" },
   { name: "Brand B" },
