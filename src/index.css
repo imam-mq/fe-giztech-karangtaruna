@@ -119,6 +119,69 @@
   }
 }
 
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--r, 0deg));
+  }
+  50% {
+    transform: translateY(-14px) rotate(var(--r, 0deg));
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(230, 126, 34, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(230, 126, 34, 0);
+  }
+}
+
+@utility gradient-text {
+  background: linear-gradient(90deg, #e67e22, #f59e0b, #e67e22);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@utility tilt-card {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: perspective(800px) rotateX(3deg) rotateY(-4deg) translateY(-4px);
+    box-shadow: 0 30px 50px rgba(30, 41, 59, 0.12);
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+
+  &.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @utility soft-shadow {
   box-shadow: 0px 20px 40px rgba(30, 41, 59, 0.04);
 }

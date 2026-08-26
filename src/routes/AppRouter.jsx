@@ -8,23 +8,23 @@ import BerandaPage from "../features/public/pages/BerandaPage";
 import TentangKamiPage from "../features/public/pages/TentangKamiPage";
 import TimPage from "../features/public/pages/TimPage";
 import LayananPaketPage from "../features/public/pages/LayananPaketPage";
-
+import WebAppsPage from "../features/public/pages/WebAppsPage";
+import UiuxPage from "../features/public/pages/UiuxPage";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public routes - website company profile GIZ Technology */}
+        {/* routes company web profile */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<BerandaPage />} />
           <Route path="/tentang" element={<TentangKamiPage />} />
           <Route path="/tentang/tim" element={<TimPage />} />
           <Route path="/layanan" element={<LayananPaketPage />} />
-          {/* Route publik lain (Portofolio, Testimoni, Kontak) menyusul di sini */}
+          <Route path="/layanan/web-apps" element={<WebAppsPage />} />
+          <Route path="/layanan/ui-ux-design" element={<UiuxPage />} />
+          {/* /layanan/landing-page dan /layanan/graphic-design menyusul */}
         </Route>
-
-        {/* Public routes - auth */}
-        {/* <Route path="/login" element={<LoginPage />} /> */}
 
         {/* Protected routes - hanya butuh login */}
         <Route element={<ProtectedRoute />}>
