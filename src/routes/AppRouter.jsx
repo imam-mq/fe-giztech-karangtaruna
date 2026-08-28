@@ -10,6 +10,7 @@ import TimPage from "../features/public/pages/TimPage";
 import LayananPaketPage from "../features/public/pages/LayananPaketPage";
 import WebAppsPage from "../features/public/pages/WebAppsPage";
 import UiuxPage from "../features/public/pages/UiuxPage";
+import LandingPage from "../features/public/pages/LandingPage";
 
 export default function AppRouter() {
   return (
@@ -23,6 +24,7 @@ export default function AppRouter() {
           <Route path="/layanan" element={<LayananPaketPage />} />
           <Route path="/layanan/web-apps" element={<WebAppsPage />} />
           <Route path="/layanan/ui-ux-design" element={<UiuxPage />} />
+          <Route path="/layanan/landing-page" element={<LandingPage />} />
           {/* /layanan/landing-page dan /layanan/graphic-design menyusul */}
         </Route>
 

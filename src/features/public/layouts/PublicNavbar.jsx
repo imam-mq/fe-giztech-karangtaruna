@@ -19,8 +19,7 @@ const NAV_LINKS = [
     children: [
       { label: "Web Apps Development", to: "/layanan#web-apps" },
       { label: "UI/UX Design", to: "/layanan/ui-ux-design" },
-      { label: "Landing Page / Custom", to: "/layanan#landing-page" },
-      { label: "Graphic Design & Logo", to: "/layanan#graphic-design" },
+      { label: "Landing Page / Custom", to: "/layanan/landing-page" },
     ],
   },
   { label: "Portofolio", to: "/portofolio" },

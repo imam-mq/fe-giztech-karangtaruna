@@ -51,7 +51,7 @@ export default function UiuxPortfolio() {
               Studi kasus lainnya ada di fitur portofolio
             </p>
             <p className="font-body-md text-sm text-on-surface-variant">
-              Lihat portofolio lengkap kami → |
+              Lihat portofolio lengkap kami →
             </p>
           </Link>
         </div>
