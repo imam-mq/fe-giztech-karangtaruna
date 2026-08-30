@@ -15,6 +15,10 @@ import PortofolioPage from "../features/public/pages/PortofolioPage";
 import ProjectDetailPage from "../features/public/pages/ProjectDetailPage";
 import TestimoniPage from "../features/public/pages/TestimoniPage";
 
+
+// auth
+import LoginPage from "../features/auth/pages/LoginPage";
+
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -31,13 +35,11 @@ export default function AppRouter() {
           <Route path="/portofolio" element={<PortofolioPage />} />
           <Route path="/portofolio/:slug" element={<ProjectDetailPage />} />
           <Route path="/testimoni" element={<TestimoniPage />} />
-          
         </Route>
 
+
         {/* login */}
-        <Route element={<ProtectedRoute />}>
-          {/*  */}
-        </Route>
+        <Route path="/login" element={<LoginPage />} />
 
         
         <Route
