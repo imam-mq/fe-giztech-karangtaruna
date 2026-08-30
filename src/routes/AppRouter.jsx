@@ -13,6 +13,7 @@ import UiuxPage from "../features/public/pages/UiuxPage";
 import LandingPage from "../features/public/pages/LandingPage";
 import PortofolioPage from "../features/public/pages/PortofolioPage";
 import ProjectDetailPage from "../features/public/pages/ProjectDetailPage";
+import TestimoniPage from "../features/public/pages/TestimoniPage";
 
 export default function AppRouter() {
   return (
@@ -29,6 +30,7 @@ export default function AppRouter() {
           <Route path="/layanan/landing-page" element={<LandingPage />} />
           <Route path="/portofolio" element={<PortofolioPage />} />
           <Route path="/portofolio/:slug" element={<ProjectDetailPage />} />
+          <Route path="/testimoni" element={<TestimoniPage />} />
           
         </Route>
 
