@@ -19,26 +19,20 @@ const TEAM = [
   },
   {
     name: "Gilang Mukharom",
-    role: "Web Developer",
+    role: "Software Engineer",
     bio: "Membangun fondasi teknis website dan aplikasi web klien.",
     linkedin: "#",
   },
   {
     name: "Naufal Hafizh",
-    role: "Front End Developer",
+    role: "Backend Developer",
     bio: "Menerjemahkan desain menjadi antarmuka yang responsif dan interaktif.",
     linkedin: "#",
   },
   {
-    name: "Asyrofudien",
-    role: "Back End Developer",
-    bio: "Merancang arsitektur sistem dan logika server yang andal dan aman.",
-    linkedin: "#",
-  },
-  {
-    name: "Afnanda Saputra",
-    role: "Graphic Designer",
-    bio: "Menciptakan identitas visual dan material branding yang memikat.",
+    name: "Imam Mubaraq",
+    role: "Tech Support Analis",
+    bio: "desain system & document technical.",
     linkedin: "#",
   },
   {
