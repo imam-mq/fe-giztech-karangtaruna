@@ -11,12 +11,14 @@ import LayananPaketPage from "../features/public/pages/LayananPaketPage";
 import WebAppsPage from "../features/public/pages/WebAppsPage";
 import UiuxPage from "../features/public/pages/UiuxPage";
 import LandingPage from "../features/public/pages/LandingPage";
+import PortofolioPage from "../features/public/pages/PortofolioPage";
+import ProjectDetailPage from "../features/public/pages/ProjectDetailPage";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* routes company web profile */}
+        {/* Public */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<BerandaPage />} />
           <Route path="/tentang" element={<TentangKamiPage />} />
@@ -25,19 +27,20 @@ export default function AppRouter() {
           <Route path="/layanan/web-apps" element={<WebAppsPage />} />
           <Route path="/layanan/ui-ux-design" element={<UiuxPage />} />
           <Route path="/layanan/landing-page" element={<LandingPage />} />
-          {/* /layanan/landing-page dan /layanan/graphic-design menyusul */}
+          <Route path="/portofolio" element={<PortofolioPage />} />
+          <Route path="/portofolio/:slug" element={<ProjectDetailPage />} />
+          
         </Route>
 
-        {/* Protected routes - hanya butuh login */}
+        {/* login */}
         <Route element={<ProtectedRoute />}>
-          {/* <Route path="/dashboard" element={<DashboardPage />} /> */}
+          {/*  */}
         </Route>
 
-        {/* Protected routes - butuh role tertentu */}
+        
         <Route
           element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.APPROVER]} />}
         >
-          {/* <Route path="/approval" element={<ApprovalPage />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
