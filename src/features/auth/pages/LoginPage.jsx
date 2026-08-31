@@ -1,11 +1,24 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import logoUtama from "../../../assets/logos/GIZ Tech logo-01.png";
 import businessTeamGif from "../../../assets/images/business-team.gif";
+import { useToast } from "../../../components/ui/ToastProvider";
+import { useAuthStore } from "../../../store/authStore";
+import { ROLES } from "../../../constants/roles";
+
+
+const DEMO_CREDENTIALS = {
+  email: "admin@giztechnology.com",
+  password: "admin123",
+};
 
 export default function LoginPage() {
+  const { showToast } = useToast();
+  const { login } = useAuthStore();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", remember: false });
 
   const handleChange = (e) => {
@@ -15,8 +28,35 @@ export default function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // auth api nanti
-    console.log("Login submit:", form);
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      const isValid =
+        form.email === DEMO_CREDENTIALS.email &&
+        form.password === DEMO_CREDENTIALS.password;
+
+      if (isValid) {
+        login(
+          { name: "Admin GIZ", role: ROLES.ADMIN, email: form.email },
+          "demo-token-sementara"
+        );
+
+        showToast({
+          type: "success",
+          title: "Login Berhasil",
+          message: "Selamat datang kembali! Mengalihkan ke dashboard...",
+        });
+
+        setTimeout(() => navigate("/admin/dashboard"), 600);
+      } else {
+        showToast({
+          type: "error",
+          title: "Login Gagal",
+          message: "Email atau password yang Anda masukkan salah.",
+        });
+        setIsSubmitting(false);
+      }
+    }, 800);
   };
 
   return (
@@ -115,9 +155,10 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full bg-primary-container text-white font-label-md py-3.5 rounded-xl hover:bg-[#d46618] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/30"
+              disabled={isSubmitting}
+              className="w-full bg-primary-container text-white font-label-md py-3.5 rounded-xl hover:bg-[#d46618] active:scale-[0.98] transition-all shadow-lg shadow-primary-container/30 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Masuk
+              {isSubmitting ? "Memproses..." : "Masuk"}
             </button>
           </form>
 
@@ -127,6 +168,12 @@ export default function LoginPage() {
               Hubungi Admin
             </a>
           </p>
+
+          {/* ⚠️ Petunjuk demo - hapus blok ini nanti */}
+          <div className="text-center text-xs text-on-surface-variant bg-surface-container-low rounded-lg p-3">
+            Demo: <strong>admin@giztechnology.com</strong> /{" "}
+            <strong>admin123</strong>
+          </div>
         </div>
 
         {/* Right: Illustration panel */}
@@ -134,7 +181,6 @@ export default function LoginPage() {
           className="hidden lg:flex relative rounded-3xl bg-gradient-to-br from-primary-container to-amber-500 p-10 h-[560px] items-center justify-center overflow-hidden"
           style={{ animation: "fadeInUp 0.6s ease-out both", animationDelay: "150ms" }}
         >
-          {/* Dekorasi cloud blur */}
           <div className="absolute -top-10 -left-10 w-40 h-40 bg-white/20 rounded-full blur-2xl" />
           <div className="absolute bottom-0 right-0 w-56 h-56 bg-white/20 rounded-full blur-2xl" />
           <div className="absolute top-1/3 right-8 w-20 h-20 bg-white/10 rounded-full blur-xl" />

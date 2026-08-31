@@ -15,9 +15,11 @@ import PortofolioPage from "../features/public/pages/PortofolioPage";
 import ProjectDetailPage from "../features/public/pages/ProjectDetailPage";
 import TestimoniPage from "../features/public/pages/TestimoniPage";
 
-
 // auth
 import LoginPage from "../features/auth/pages/LoginPage";
+
+// admin
+import AdminLayout from "../features/admin/layouts/AdminLayout";
 
 export default function AppRouter() {
   return (
@@ -37,14 +39,16 @@ export default function AppRouter() {
           <Route path="/testimoni" element={<TestimoniPage />} />
         </Route>
 
-
         {/* login */}
         <Route path="/login" element={<LoginPage />} />
 
-        
+        {/* Admin  */}
         <Route
           element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.APPROVER]} />}
         >
+          <Route element={<AdminLayout />}>
+            <Route path="/admin/dashboard" element={<div>Dashboard placeholder</div>} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
