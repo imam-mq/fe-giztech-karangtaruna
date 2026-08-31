@@ -96,7 +96,9 @@ export default function Sidebar() {
                       {sidebarOpen && (
                         <div
                           className="overflow-hidden transition-all duration-200"
-                          style={{ maxHeight: isOpen ? `${item.children.length * 40}px` : "0px" }}
+                          style={{
+                            maxHeight: isOpen ? `${item.children.length * 40}px` : "0px",
+                          }}
                         >
                           <div className="pl-11 pr-3 py-1 flex flex-col gap-0.5">
                             {item.children.map((child) => (
@@ -104,14 +106,19 @@ export default function Sidebar() {
                                 key={child.to}
                                 to={child.to}
                                 className={({ isActive }) =>
-                                  `px-3 py-2 rounded-lg text-sm transition-colors ${
+                                  `flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
                                     isActive
                                       ? "text-primary-container font-semibold bg-primary-container/10"
                                       : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low"
                                   }`
                                 }
                               >
-                                {child.label}
+                                <span>{child.label}</span>
+                                {typeof child.count === "number" && (
+                                  <span className="bg-surface-container-low text-on-surface-variant text-xs font-semibold rounded-full h-5 min-w-5 px-1.5 flex items-center justify-center">
+                                    {child.count}
+                                  </span>
+                                )}
                               </NavLink>
                             ))}
                           </div>

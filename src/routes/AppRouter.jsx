@@ -42,12 +42,11 @@ export default function AppRouter() {
         {/* login */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Admin  */}
-        <Route
-          element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.APPROVER]} />}
-        >
+        
+        <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<div>Dashboard placeholder</div>} />
+     
           </Route>
         </Route>
       </Routes>
