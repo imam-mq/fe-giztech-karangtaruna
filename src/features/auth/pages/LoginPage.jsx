@@ -5,7 +5,7 @@ import logoUtama from "../../../assets/logos/GIZ Tech logo-01.png";
 import businessTeamGif from "../../../assets/images/business-team.gif";
 import { useToast } from "../../../components/ui/ToastProvider";
 import { useAuthStore } from "../../../store/authStore";
-import { ROLES } from "../../../constants/roles";
+import { login as authLogin } from "../services/authService";
 
 
 const DEMO_CREDENTIALS = {
@@ -26,37 +26,34 @@ export default function LoginPage() {
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      const isValid =
-        form.email === DEMO_CREDENTIALS.email &&
-        form.password === DEMO_CREDENTIALS.password;
+    try {
+      const data = await authLogin(form.email, form.password);
 
-      if (isValid) {
-        login(
-          { name: "Admin GIZ", role: ROLES.ADMIN, email: form.email },
-          "demo-token-sementara"
-        );
+      login(
+        { name: data.user.name, role: data.user.role, email: data.user.email },
+        data.token
+      );
 
-        showToast({
-          type: "success",
-          title: "Login Berhasil",
-          message: "Selamat datang kembali! Mengalihkan ke dashboard...",
-        });
+      showToast({
+        type: "success",
+        title: "Login Berhasil",
+        message: "Selamat datang kembali! Mengalihkan ke dashboard...",
+      });
+      setTimeout(() => navigate("/admin/dashboard"), 600);
+    } catch (error) {
+      const message = error.response?.data?.message || "Email atau password yang Anda masukkan salah.";
 
-        setTimeout(() => navigate("/admin/dashboard"), 600);
-      } else {
-        showToast({
-          type: "error",
-          title: "Login Gagal",
-          message: "Email atau password yang Anda masukkan salah.",
-        });
-        setIsSubmitting(false);
-      }
-    }, 800);
+      showToast({
+        type: "error",
+        title: "Login Gagal",
+        message,
+      });
+      setIsSubmitting(false);
+    }
   };
 
   return (

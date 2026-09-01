@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
-import { ROLES } from "../constants/roles";
 
 // Public
 import PublicLayout from "../features/public/layouts/PublicLayout";
@@ -43,12 +42,11 @@ export default function AppRouter() {
         {/* login */}
         <Route path="/login" element={<LoginPage />} />
 
-        
-        <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
+        {/* Admin  */}
+        <Route element={<ProtectedRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<div>Dashboard placeholder</div>} />
             <Route path="/admin/web-profile/tim" element={<TimAdminPage />} />
-            
           </Route>
         </Route>
       </Routes>
