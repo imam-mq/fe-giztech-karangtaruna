@@ -20,6 +20,7 @@ import LoginPage from "../features/auth/pages/LoginPage";
 
 // admin
 import AdminLayout from "../features/admin/layouts/AdminLayout";
+import TimAdminPage from "../features/admin/pages/TimAdminPage";
 
 export default function AppRouter() {
   return (
@@ -46,7 +47,8 @@ export default function AppRouter() {
         <Route element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<div>Dashboard placeholder</div>} />
-     
+            <Route path="/admin/web-profile/tim" element={<TimAdminPage />} />
+            
           </Route>
         </Route>
       </Routes>
