@@ -13,7 +13,7 @@ export const NAV_ITEMS = [
         icon: Layers,
         children: [
           { label: "Beranda", to: "/admin/web-profile/beranda" },
-          { label: "Profil Perusahaan", to: "/admin/web-profile/profil-perusahaan" },
+          { label: "Perjalanan Kami", to: "/admin/web-profile/milestones", count: 4 },
           { label: "Tim", to: "/admin/web-profile/tim", count: 6 },
           { label: "Layanan & Paket", to: "/admin/web-profile/layanan", count: 4 },
           { label: "Portofolio", to: "/admin/web-profile/portofolio", count: 5 },

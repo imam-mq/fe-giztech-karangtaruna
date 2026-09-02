@@ -19,6 +19,7 @@ import LoginPage from "../features/auth/pages/LoginPage";
 
 // admin
 import AdminLayout from "../features/admin/layouts/AdminLayout";
+import DashboardPage from "../features/admin/pages/DashboardPage";
 import TimAdminPage from "../features/admin/pages/TimAdminPage";
 
 export default function AppRouter() {
@@ -45,7 +46,7 @@ export default function AppRouter() {
         {/* Admin  */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AdminLayout />}>
-            <Route path="/admin/dashboard" element={<div>Dashboard placeholder</div>} />
+            <Route path="/admin/dashboard" element={<DashboardPage />} />
             <Route path="/admin/web-profile/tim" element={<TimAdminPage />} />
           </Route>
         </Route>

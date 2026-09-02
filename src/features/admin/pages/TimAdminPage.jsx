@@ -1,66 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, ChevronRight } from "lucide-react";
 import TeamMemberCard from "../components/team/TeamMemberCard";
 import TeamMemberModal from "../components/team/TeamMemberModal";
 import DeleteConfirmModal from "../components/team/DeleteConfirmModal";
-
-
-const INITIAL_TEAM = [
-  {
-    id: 1,
-    name: "Izzul Faturrizky",
-    role: "Project Manager",
-    bio: "Mengelola proyek dari perencanaan hingga rilis dengan pendekatan Agile.",
-    linkedin: "",
-    photo: null,
-  },
-  {
-    id: 2,
-    name: "Gilang Mukharom",
-    role: "Web Developer",
-    bio: "Membangun fondasi teknis website dan aplikasi web klien.",
-    linkedin: "",
-    photo: null,
-  },
-  {
-    id: 3,
-    name: "Naufal Hafizh",
-    role: "Front End Developer",
-    bio: "Menerjemahkan desain menjadi antarmuka yang responsif dan interaktif.",
-    linkedin: "",
-    photo: null,
-  },
-  {
-    id: 4,
-    name: "Asyrofudien",
-    role: "Back End Developer",
-    bio: "Merancang arsitektur sistem dan logika server yang andal dan aman.",
-    linkedin: "",
-    photo: null,
-  },
-  {
-    id: 5,
-    name: "Afnanda Saputra",
-    role: "Graphic Designer",
-    bio: "Menciptakan identitas visual dan material branding yang memikat.",
-    linkedin: "",
-    photo: null,
-  },
-  {
-    id: 6,
-    name: "Muh Fadil Nur",
-    role: "Marketing Communication",
-    bio: "Menjembatani komunikasi GIZ Technology dengan klien dan publik.",
-    linkedin: "",
-    photo: null,
-  },
-];
+import { getAllTim, createTim, updateTim, deleteTim } from "../services/timService";
 
 export default function TimAdminPage() {
-  const [team, setTeam] = useState(INITIAL_TEAM);
+  const [team, setTeam] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editingMember, setEditingMember] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+
+  useEffect(() => {
+    const fetchTim = async () => {
+      try {
+        const data = await getAllTim();
+        setTeam(data);
+      } catch (error) {
+        console.error("Gagal memuat data tim:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTim();
+  }, []);
 
   const openAddModal = () => {
     setEditingMember(null);
@@ -68,25 +32,53 @@ export default function TimAdminPage() {
   };
 
   const openEditModal = (member) => {
-    setEditingMember(member);
+    setEditingMember({
+      id: member.id,
+      name: member.name,
+      role: member.role,
+      bio: member.bio || "",
+      linkedin: member.linked || "",
+      photo: member.photo_url,
+      photoFile: null,
+    });
     setShowModal(true);
   };
 
-  const handleSave = (form) => {
-    if (editingMember) {
-      setTeam((prev) =>
-        prev.map((m) => (m.id === editingMember.id ? { ...m, ...form } : m))
-      );
-    } else {
-      setTeam((prev) => [...prev, { ...form, id: Date.now() }]);
+  const handleSave = async (form) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("role", form.role);
+      formData.append("bio", form.bio || "");
+      if (form.linkedin) formData.append("linked", form.linkedin);
+      if (form.photoFile) formData.append("photo", form.photoFile);
+
+      if (editingMember) {
+        const updated = await updateTim(editingMember.id, formData);
+        setTeam((prev) => prev.map((m) => (m.id === editingMember.id ? updated : m)));
+      } else {
+        const created = await createTim(formData);
+        setTeam((prev) => [...prev, created]);
+      }
+
+      setShowModal(false);
+      setEditingMember(null);
+    } catch (error) {
+      console.error("Gagal menyimpan data tim:", error);
+      alert("Gagal menyimpan data tim. Silakan coba lagi.");
     }
-    setShowModal(false);
-    setEditingMember(null);
   };
 
-  const handleConfirmDelete = () => {
-    setTeam((prev) => prev.filter((m) => m.id !== deleteTarget.id));
-    setDeleteTarget(null);
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteTim(deleteTarget.id);
+      setTeam((prev) => prev.filter((m) => m.id !== deleteTarget.id));
+    } catch (error) {
+      console.error("Gagal menghapus data tim:", error);
+      alert("Gagal menghapus data tim.");
+    } finally {
+      setDeleteTarget(null);
+    }
   };
 
   return (

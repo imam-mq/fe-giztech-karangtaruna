@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { User } from "lucide-react";
+import { getAllTim } from "../../services/timService";
 
 function LinkedinIcon(props) {
   return (
@@ -8,72 +10,66 @@ function LinkedinIcon(props) {
   );
 }
 
-// Data resmi dari PDF Portofolio & Offering GIZ Technology (halaman "Meet Our Experts").
-// Ganti "linkedin" jadi URL profil asli kalau sudah ada, atau hapus prop-nya kalau belum.
-const TEAM = [
-  {
-    name: "Izzul Faturrizky",
-    role: "Project Manager",
-    bio: "Mengelola proyek dari perencanaan hingga rilis dengan pendekatan Agile.",
-    linkedin: "#",
-  },
-  {
-    name: "Gilang Mukharom",
-    role: "Software Engineer",
-    bio: "Membangun fondasi teknis website dan aplikasi web klien.",
-    linkedin: "#",
-  },
-  {
-    name: "Naufal Hafizh",
-    role: "Backend Developer",
-    bio: "Menerjemahkan desain menjadi antarmuka yang responsif dan interaktif.",
-    linkedin: "#",
-  },
-  {
-    name: "Imam Mubaraq",
-    role: "Tech Support Analis",
-    bio: "desain system & document technical.",
-    linkedin: "#",
-  },
-  {
-    name: "Muh Fadil Nur",
-    role: "Marketing Communication",
-    bio: "Menjembatani komunikasi GIZ Technology dengan klien dan publik.",
-    linkedin: "#",
-  },
-];
-
 export default function TimGrid() {
+  const [team, setTeam] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTim = async () => {
+      try {
+        const data = await getAllTim();
+        setTeam(data);
+      } catch (error) {
+        console.error("Gagal memuat data tim:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTim();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24 text-center text-secondary">
+        Memuat data tim...
+      </section>
+    );
+  }
+
   return (
     <section className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto pb-24">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
-        {TEAM.map(({ name, role, bio, linkedin }) => (
+        {team.map((member) => (
           <div
-            key={name}
+            key={member.id}
             className="bg-white rounded-3xl p-8 flex flex-col items-center text-center soft-shadow card-hover-accent transition-transform hover:-translate-y-2"
           >
             <div className="w-32 h-32 rounded-full mb-6 overflow-hidden border-4 border-surface-container-low shadow-inner bg-surface-container-high flex items-center justify-center">
-              <User size={48} className="text-secondary" />
+              {member.photo_url ? (
+                <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover" />
+              ) : (
+                <User size={48} className="text-secondary" />
+              )}
             </div>
             <h3 className="font-headline-md text-headline-md text-on-surface mb-1">
-              {name}
+              {member.name}
             </h3>
             <p className="font-label-md text-label-md text-primary-container mb-4">
-              {role}
+              {member.role}
             </p>
             <p className="font-body-md text-body-md text-secondary mb-6 flex-grow">
-              {bio}
+              {member.bio}
             </p>
-            {linkedin && (
-            <a
-                href={linkedin}
+            {member.linked && (
+              <a
+                href={member.linked}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`LinkedIn ${name}`}
+                aria-label={`LinkedIn ${member.name}`}
                 className="text-secondary hover:text-primary-container transition-colors"
-            >
-                <LinkedinIcon width="20" height="20" /> 
-            </a>
+              >
+                <LinkedinIcon width="20" height="20" />
+              </a>
             )}
           </div>
         ))}

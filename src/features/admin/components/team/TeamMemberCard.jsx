@@ -1,7 +1,7 @@
 import { User, Pencil, Trash2 } from "lucide-react";
 
 export default function TeamMemberCard({ member, onEdit, onDelete, index }) {
-  const { name, role, bio, photo } = member;
+  const { name, role, bio, photo_url: photo } = member;
 
   return (
     <div

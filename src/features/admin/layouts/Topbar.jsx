@@ -67,10 +67,6 @@ export default function Topbar({ title = "Dashboard" }) {
               className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-surface-variant py-2"
               style={{ animation: "toastSlideIn 0.15s ease-out both" }}
             >
-              <button className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container-low transition-colors text-left">
-                <User size={16} />
-                Profil Saya
-              </button>
               <button
                 onClick={logout}
                 className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-error hover:bg-red-50 transition-colors text-left"

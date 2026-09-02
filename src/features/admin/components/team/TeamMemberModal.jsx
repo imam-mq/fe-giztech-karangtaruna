@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, User, Link2 } from "lucide-react";
 
-const EMPTY_FORM = { name: "", role: "", bio: "", linkedin: "", photo: null };
+const EMPTY_FORM = { name: "", role: "", bio: "", linkedin: "", photo: null, photoFile: null };
 
 export default function TeamMemberModal({ member, onClose, onSave }) {
   const [form, setForm] = useState(EMPTY_FORM);
@@ -20,7 +20,7 @@ export default function TeamMemberModal({ member, onClose, onSave }) {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => setForm((prev) => ({ ...prev, photo: reader.result }));
+    reader.onload = () => setForm((prev) => ({ ...prev, photo: reader.result, photoFile: file }));
     reader.readAsDataURL(file);
   };
 

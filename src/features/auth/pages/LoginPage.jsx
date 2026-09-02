@@ -41,7 +41,7 @@ export default function LoginPage() {
       showToast({
         type: "success",
         title: "Login Berhasil",
-        message: "Selamat datang kembali! Mengalihkan ke dashboard...",
+        message: "Mengalihkan ke dashboard admin",
       });
       setTimeout(() => navigate("/admin/dashboard"), 600);
     } catch (error) {
