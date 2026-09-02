@@ -21,6 +21,8 @@ import LoginPage from "../features/auth/pages/LoginPage";
 import AdminLayout from "../features/admin/layouts/AdminLayout";
 import DashboardPage from "../features/admin/pages/DashboardPage";
 import TimAdminPage from "../features/admin/pages/TimAdminPage";
+import MilestonesAdminPage from "../features/admin/pages/MilestonesAdminPage";
+import TestimoniAdminPage from "../features/admin/pages/TestimoniAdminPage";
 
 export default function AppRouter() {
   return (
@@ -43,11 +45,13 @@ export default function AppRouter() {
         {/* login */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Admin  */}
+        {/* Admin - cukup butuh login (sistem cuma punya 1 role admin, no role gate) */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<DashboardPage />} />
             <Route path="/admin/web-profile/tim" element={<TimAdminPage />} />
+            <Route path="/admin/web-profile/milestones" element={<MilestonesAdminPage />} />
+            <Route path="/admin/web-profile/testimoni" element={<TestimoniAdminPage />} />
           </Route>
         </Route>
       </Routes>
