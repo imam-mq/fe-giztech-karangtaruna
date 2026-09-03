@@ -23,6 +23,9 @@ import DashboardPage from "../features/admin/pages/DashboardPage";
 import TimAdminPage from "../features/admin/pages/TimAdminPage";
 import MilestonesAdminPage from "../features/admin/pages/MilestonesAdminPage";
 import TestimoniAdminPage from "../features/admin/pages/TestimoniAdminPage";
+import LayananAdminPage from "../features/admin/pages/LayananAdminPage";
+import LayananDetailPage from "../features/admin/pages/LayananDetailPage";
+import PortofolioAdminPage from "../features/admin/pages/PortofolioAdminPage";
 
 export default function AppRouter() {
   return (
@@ -52,6 +55,9 @@ export default function AppRouter() {
             <Route path="/admin/web-profile/tim" element={<TimAdminPage />} />
             <Route path="/admin/web-profile/milestones" element={<MilestonesAdminPage />} />
             <Route path="/admin/web-profile/testimoni" element={<TestimoniAdminPage />} />
+            <Route path="/admin/web-profile/layanan" element={<LayananAdminPage />} />
+            <Route path="/admin/web-profile/layanan/:slug" element={<LayananDetailPage />} />
+            <Route path="/admin/web-profile/portofolio" element={<PortofolioAdminPage />} />
           </Route>
         </Route>
       </Routes>
