@@ -1,23 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, ChevronRight, Pencil, Trash2 } from "lucide-react";
 import MilestoneModal from "../components/profile/MilestoneModal";
 import ConfirmDeleteModal from "../../../components/ui/ConfirmDeleteModal";
-
-// ⚠️ SEMENTARA - data awal sama dengan yang tampil di halaman publik /tentang.
-// Begitu backend siap, ganti dengan fetch GET /api/milestones, dan
-// handleSave/handleConfirmDelete diganti manggil apiClient.post/put/delete.
-const INITIAL_MILESTONES = [
-  { id: 1, tahun: "2019", label: "Pendirian GIZ Technology" },
-  { id: 2, tahun: "2021", label: "Ekspansi Layanan & Tim" },
-  { id: 3, tahun: "2023", label: "Mencapai 50+ Proyek Selesai" },
-  { id: 4, tahun: "Sekarang", label: "Partner Utama Transformasi Digital" },
-];
+import {
+  getAllProfile,
+  createProfile,
+  updateProfile,
+  deleteProfile,
+} from "../services/profileService";
 
 export default function MilestonesAdminPage() {
-  const [milestones, setMilestones] = useState(INITIAL_MILESTONES);
+  const [milestones, setMilestones] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllProfile();
+        setMilestones(data);
+      } catch (error) {
+        console.error("Gagal memuat data milestone:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const openAddModal = () => {
     setEditing(null);
@@ -29,21 +40,33 @@ export default function MilestonesAdminPage() {
     setShowModal(true);
   };
 
-  const handleSave = (form) => {
-    if (editing) {
-      setMilestones((prev) =>
-        prev.map((m) => (m.id === editing.id ? { ...m, ...form } : m))
-      );
-    } else {
-      setMilestones((prev) => [...prev, { ...form, id: Date.now() }]);
+  const handleSave = async (form) => {
+    try {
+      if (editing) {
+        const updated = await updateProfile(editing.id, form);
+        setMilestones((prev) => prev.map((m) => (m.id === editing.id ? updated : m)));
+      } else {
+        const created = await createProfile(form);
+        setMilestones((prev) => [...prev, created]);
+      }
+      setShowModal(false);
+      setEditing(null);
+    } catch (error) {
+      console.error("Gagal menyimpan milestone:", error);
+      alert("Gagal menyimpan milestone. Silakan coba lagi.");
     }
-    setShowModal(false);
-    setEditing(null);
   };
 
-  const handleConfirmDelete = () => {
-    setMilestones((prev) => prev.filter((m) => m.id !== deleteTarget.id));
-    setDeleteTarget(null);
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteProfile(deleteTarget.id);
+      setMilestones((prev) => prev.filter((m) => m.id !== deleteTarget.id));
+    } catch (error) {
+      console.error("Gagal menghapus milestone:", error);
+      alert("Gagal menghapus milestone.");
+    } finally {
+      setDeleteTarget(null);
+    }
   };
 
   return (

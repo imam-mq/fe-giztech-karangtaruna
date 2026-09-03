@@ -1,46 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, ChevronRight } from "lucide-react";
 import TestimonialCard from "../components/testimoni/TestimonialCard";
 import TestimonialModal from "../components/testimoni/TestimonialModal";
 import ConfirmDeleteModal from "../../../components/ui/ConfirmDeleteModal";
-
-// ⚠️ SEMENTARA - data awal sama dengan yang tampil di halaman publik Testimoni & Beranda.
-// Field "perusahaan" untuk Rina & Ahmad masih KOSONG (data lama cuma ada jabatan,
-// bukan nama perusahaan) - perlu diisi manual dulu. Begitu backend siap, ganti
-// dengan fetch GET /api/testimonials, dan handleSave/handleConfirmDelete
-// diganti manggil apiClient.post/put/delete.
-const INITIAL_TESTIMONIALS = [
-  {
-    id: 1,
-    name: "Budi Santoso",
-    perusahaan: "PT Sejahtera Abadi",
-    deskripsi:
-      "GIZ Technology sangat responsif dan membantu merealisasikan sistem ERP kami sesuai jadwal. Timnya sangat profesional.",
-    avatar: null,
-  },
-  {
-    id: 2,
-    name: "Rina Melati",
-    perusahaan: "",
-    deskripsi:
-      "Desain UI/UX yang diberikan sangat modern dan user-friendly. Sangat puas dengan layanan dari tim kreatifnya.",
-    avatar: null,
-  },
-  {
-    id: 3,
-    name: "Ahmad Wijaya",
-    perusahaan: "",
-    deskripsi:
-      "Support purna jualnya luar biasa. Aplikasi berjalan lancar dan bug langsung ditangani dengan cepat.",
-    avatar: null,
-  },
-];
+import {
+  getAllTestimoni,
+  createTestimoni,
+  updateTestimoni,
+  deleteTestimoni,
+} from "../services/testimoniService";
 
 export default function TestimoniAdminPage() {
-  const [testimonials, setTestimonials] = useState(INITIAL_TESTIMONIALS);
+  const [testimonials, setTestimonials] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllTestimoni();
+        setTestimonials(data);
+      } catch (error) {
+        console.error("Gagal memuat data testimoni:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const openAddModal = () => {
     setEditing(null);
@@ -48,25 +37,51 @@ export default function TestimoniAdminPage() {
   };
 
   const openEditModal = (testimonial) => {
-    setEditing(testimonial);
+    setEditing({
+      id: testimonial.id,
+      name: testimonial.name,
+      perusahaan: testimonial.perusahaan,
+      deskripsi: testimonial.deskripsi,
+      avatar: testimonial.avatar_url,
+      avatarFile: null,
+    });
     setShowModal(true);
   };
 
-  const handleSave = (form) => {
-    if (editing) {
-      setTestimonials((prev) =>
-        prev.map((t) => (t.id === editing.id ? { ...t, ...form } : t))
-      );
-    } else {
-      setTestimonials((prev) => [...prev, { ...form, id: Date.now() }]);
+  const handleSave = async (form) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("perusahaan", form.perusahaan);
+      formData.append("deskripsi", form.deskripsi);
+      if (form.avatarFile) formData.append("avatar", form.avatarFile);
+
+      if (editing) {
+        const updated = await updateTestimoni(editing.id, formData);
+        setTestimonials((prev) => prev.map((t) => (t.id === editing.id ? updated : t)));
+      } else {
+        const created = await createTestimoni(formData);
+        setTestimonials((prev) => [...prev, created]);
+      }
+
+      setShowModal(false);
+      setEditing(null);
+    } catch (error) {
+      console.error("Gagal menyimpan testimoni:", error);
+      alert("Gagal menyimpan testimoni. Silakan coba lagi.");
     }
-    setShowModal(false);
-    setEditing(null);
   };
 
-  const handleConfirmDelete = () => {
-    setTestimonials((prev) => prev.filter((t) => t.id !== deleteTarget.id));
-    setDeleteTarget(null);
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteTestimoni(deleteTarget.id);
+      setTestimonials((prev) => prev.filter((t) => t.id !== deleteTarget.id));
+    } catch (error) {
+      console.error("Gagal menghapus testimoni:", error);
+      alert("Gagal menghapus testimoni.");
+    } finally {
+      setDeleteTarget(null);
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import { User, Pencil, Trash2, Quote } from "lucide-react";
 
 export default function TestimonialCard({ testimonial, onEdit, onDelete, index }) {
-  const { name, perusahaan, deskripsi, avatar } = testimonial;
+  const { name, perusahaan, deskripsi, avatar_url: avatar } = testimonial;
 
   return (
     <div

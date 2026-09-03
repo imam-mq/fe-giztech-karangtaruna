@@ -1,11 +1,28 @@
-const MILESTONES = [
-  { year: "2019", label: "Pendirian GIZ Technology" },
-  { year: "2021", label: "Ekspansi Layanan & Tim" },
-  { year: "2023", label: "Mencapai 50+ Proyek Selesai" },
-  { year: "Sekarang", label: "Partner Utama Transformasi Digital" },
-];
+import { useState, useEffect } from "react";
+import { getAllProfile } from "../../services/profileService";
 
 export default function ProfileTimeline() {
+  const [milestones, setMilestones] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllProfile();
+        setMilestones(data);
+      } catch (error) {
+        console.error("Gagal memuat data perjalanan:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (isLoading || milestones.length === 0) {
+    return null;
+  }
+
   return (
     <section className="bg-surface-container-lowest py-20">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
@@ -22,11 +39,11 @@ export default function ProfileTimeline() {
             style={{ left: "50%" }}
           />
 
-          {MILESTONES.map((item, i) => {
+          {milestones.map((item, i) => {
             const isEven = i % 2 === 0;
             return (
               <div
-                key={item.year}
+                key={item.id}
                 className={`mb-8 flex items-center w-full ${
                   isEven ? "md:flex-row" : "md:flex-row-reverse"
                 } flex-row`}
@@ -37,7 +54,7 @@ export default function ProfileTimeline() {
                   }`}
                 >
                   <h4 className="font-label-md text-label-md text-primary-container">
-                    {item.year}
+                    {item.tahun}
                   </h4>
                   <p className="font-body-md text-body-md text-secondary">
                     {item.label}
