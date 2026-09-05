@@ -124,15 +124,16 @@ export default function LayananModal({ layanan, availableServices = [], onClose,
 
           <div>
             <label className="block font-label-md text-sm text-on-surface mb-2">
-              Harga Mulai Dari
+              Harga Mulai Dari (Rp)
             </label>
             <input
-              type="text"
+              type="number"
               name="harga_mulai_dari"
               value={form.harga_mulai_dari}
               onChange={handleChange}
-              placeholder="Mis. Rp5.000.000"
-              required
+              placeholder="Mis. 5000000"
+              min="0"
+              step="1"
               className="w-full bg-surface-bright border border-surface-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors"
             />
           </div>

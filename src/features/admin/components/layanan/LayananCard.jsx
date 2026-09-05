@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Pencil, Trash2, ArrowRight } from "lucide-react";
+import { formatCurrency } from "../../../../utils/formatCurrency";
 
 export default function LayananCard({ layanan, onEdit, onDelete, index }) {
   const { nama_layanan, slug, deskripsi_singkat, harga_mulai_dari, icon: Icon, accent } =
@@ -49,7 +50,7 @@ export default function LayananCard({ layanan, onEdit, onDelete, index }) {
 
       <div className="flex items-center justify-between pt-3 border-t border-surface-variant">
         <p className="text-primary-container font-bold text-sm">
-          Mulai Dari {harga_mulai_dari}
+          Mulai Dari {formatCurrency(harga_mulai_dari)}
         </p>
         <span className="inline-flex items-center gap-1 text-on-surface-variant text-xs font-semibold group-hover:text-primary-container transition-colors">
           Kelola Paket Harga

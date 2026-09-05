@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Pencil, Trash2, CheckCircle2, X, Plus } from "lucide-react";
+import { formatCurrency } from "../../../../utils/formatCurrency";
 
 export default function PaketHargaCard({
   paket,
@@ -48,7 +49,7 @@ export default function PaketHargaCard({
         <h3 className="font-headline-md text-lg text-on-surface">{nama_paket}</h3>
       </div>
       <p className="text-on-surface-variant text-xs mb-3">{tagline}</p>
-      <p className="font-headline-md text-2xl font-bold text-primary mb-4">{harga}</p>
+      <p className="font-headline-md text-2xl font-bold text-primary mb-4">{formatCurrency(harga)}</p>
 
       {/* Toggle Paling Populer - hover reveal */}
       <button

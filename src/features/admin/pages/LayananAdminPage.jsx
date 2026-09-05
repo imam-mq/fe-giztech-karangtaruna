@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, ChevronRight, Code2, PenTool, Rocket, Palette } from "lucide-react";
 import LayananCard from "../components/layanan/LayananCard";
 import LayananModal from "../components/layanan/LayananModal";
 import ConfirmDeleteModal from "../../../components/ui/ConfirmDeleteModal";
 import { PREDEFINED_SERVICES } from "../components/layanan/predefinedServices";
+import {
+  getAllLayanan,
+  createLayanan,
+  updateLayanan,
+  deleteLayanan,
+} from "../services/layananService";
 
-// Icon & warna aksen per slug - cuma dipakai visual admin, dipetakan manual
 const ICON_MAP = {
   "web-apps": { icon: Code2, accent: "bg-orange-50 text-primary-container" },
   "ui-ux-design": { icon: PenTool, accent: "bg-blue-50 text-blue-600" },
@@ -13,50 +18,27 @@ const ICON_MAP = {
   "graphic-design": { icon: Palette, accent: "bg-purple-50 text-purple-600" },
 };
 
-// ⚠️ SEMENTARA - data awal sama dengan yang tampil di halaman publik /layanan.
-// Begitu backend siap, ganti dengan fetch GET /api/layanan, dan
-// handleSave/handleConfirmDelete manggil apiClient.post/put/delete.
-const INITIAL_LAYANAN = [
-  {
-    id: 1,
-    nama_layanan: "Web Apps Development",
-    slug: "web-apps",
-    deskripsi_singkat: "Aplikasi web skalabel, aman, dan berkinerja tinggi.",
-    harga_mulai_dari: "Rp5.000.000",
-  },
-  {
-    id: 2,
-    nama_layanan: "UI/UX Design",
-    slug: "ui-ux-design",
-    deskripsi_singkat:
-      "Riset, wireframe, hingga prototype siap developer handoff.",
-    harga_mulai_dari: "Rp500.000",
-  },
-  {
-    id: 3,
-    nama_layanan: "Landing Page / Custom",
-    slug: "landing-page",
-    deskripsi_singkat:
-      "Desain responsif, SEO-friendly, dioptimalkan untuk konversi.",
-    harga_mulai_dari: "Rp2.000.000",
-  },
-  {
-    id: 4,
-    nama_layanan: "Graphic Design & Logo",
-    slug: "graphic-design",
-    deskripsi_singkat:
-      "Identitas visual, logo, dan material branding yang memikat.",
-    harga_mulai_dari: "Rp300.000",
-  },
-];
-
 export default function LayananAdminPage() {
-  const [layananList, setLayananList] = useState(INITIAL_LAYANAN);
+  const [layananList, setLayananList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-  // Layanan dari daftar tetap yang BELUM ada di layananList
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllLayanan();
+        setLayananList(data);
+      } catch (error) {
+        console.error("Gagal memuat data layanan:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
   const availableServices = PREDEFINED_SERVICES.filter(
     (s) => !layananList.some((l) => l.slug === s.slug)
   );
@@ -71,21 +53,33 @@ export default function LayananAdminPage() {
     setShowModal(true);
   };
 
-  const handleSave = (form) => {
-    if (editing) {
-      setLayananList((prev) =>
-        prev.map((l) => (l.id === editing.id ? { ...l, ...form } : l))
-      );
-    } else {
-      setLayananList((prev) => [...prev, { ...form, id: Date.now() }]);
+  const handleSave = async (form) => {
+    try {
+      if (editing) {
+        const updated = await updateLayanan(editing.slug, form);
+        setLayananList((prev) => prev.map((l) => (l.id === editing.id ? updated : l)));
+      } else {
+        const created = await createLayanan(form);
+        setLayananList((prev) => [...prev, created]);
+      }
+      setShowModal(false);
+      setEditing(null);
+    } catch (error) {
+      console.error("Gagal menyimpan layanan:", error);
+      alert("Gagal menyimpan layanan. Silakan coba lagi.");
     }
-    setShowModal(false);
-    setEditing(null);
   };
 
-  const handleConfirmDelete = () => {
-    setLayananList((prev) => prev.filter((l) => l.id !== deleteTarget.id));
-    setDeleteTarget(null);
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteLayanan(deleteTarget.slug);
+      setLayananList((prev) => prev.filter((l) => l.id !== deleteTarget.id));
+    } catch (error) {
+      console.error("Gagal menghapus layanan:", error);
+      alert("Gagal menghapus layanan.");
+    } finally {
+      setDeleteTarget(null);
+    }
   };
 
   return (

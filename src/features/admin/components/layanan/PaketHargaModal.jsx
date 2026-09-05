@@ -66,14 +66,16 @@ export default function PaketHargaModal({ paket, onClose, onSave }) {
 
           <div>
             <label className="block font-label-md text-sm text-on-surface mb-2">
-              Harga
+              Harga (Rp)
             </label>
             <input
-              type="text"
+              type="number"
               name="harga"
               value={form.harga}
               onChange={handleChange}
-              placeholder="Mis. Rp5.000.000 - 8.000.000"
+              placeholder="Mis. 5000000"
+              min="0"
+              step="1"
               required
               className="w-full bg-surface-bright border border-surface-variant rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors"
             />
